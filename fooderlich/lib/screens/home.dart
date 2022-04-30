@@ -1,13 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:fooderlich/screens/grocery_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../models/tab_manager.dart';
+import '../models/app_state_manager.dart';
+import '../models/fooderlich_pages.dart';
+import '../models/profile_manager.dart';
 import 'explore_screen.dart';
+import 'grocery_screen.dart';
 import 'recipes_screen.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  static MaterialPage page(int currentTab) {
+    return MaterialPage(
+      name: FooderlichPages.home,
+      key: ValueKey(FooderlichPages.home),
+      child: Home(
+        currentTab: currentTab,
+      ),
+    );
+  }
+
+  const Home({
+    Key? key,
+    required this.currentTab,
+  }) : super(key: key);
+
+  final int currentTab;
 
   @override
   _HomeState createState() => _HomeState();
@@ -18,33 +35,30 @@ class _HomeState extends State<Home> {
     ExploreScreen(),
     RecipesScreen(),
     const GroceryScreen(),
-    Container(color: Colors.blue),
   ];
 
   @override
   Widget build(BuildContext context) {
-    // 1
-    return Consumer<TabManager>(
-      builder: (context, tabManager, child) {
+    return Consumer<AppStateManager>(
+      builder: (context, appStateManager, child) {
         return Scaffold(
           appBar: AppBar(
             title: Text(
               'Fooderlich',
               style: Theme.of(context).textTheme.headline6,
             ),
+            actions: [
+              profileButton(),
+            ],
           ),
-          // 2
-          // TODO: Replace body
-          body: IndexedStack(index: tabManager.selectedTab, children: pages),
-
+          body: IndexedStack(index: widget.currentTab, children: pages),
           bottomNavigationBar: BottomNavigationBar(
             selectedItemColor:
                 Theme.of(context).textSelectionTheme.selectionColor,
-            // 3
-            currentIndex: tabManager.selectedTab,
+            currentIndex: widget.currentTab,
             onTap: (index) {
-              // 4
-              tabManager.goToTab(index);
+              Provider.of<AppStateManager>(context, listen: false)
+                  .goToTab(index);
             },
             items: <BottomNavigationBarItem>[
               const BottomNavigationBarItem(
@@ -63,6 +77,24 @@ class _HomeState extends State<Home> {
           ),
         );
       },
+    );
+  }
+
+  Widget profileButton() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 16.0),
+      child: GestureDetector(
+        child: const CircleAvatar(
+          backgroundColor: Colors.transparent,
+          backgroundImage: AssetImage(
+            'assets/profile_pics/person_stef.jpeg',
+          ),
+        ),
+        onTap: () {
+          Provider.of<ProfileManager>(context, listen: false)
+              .tapOnProfile(true);
+        },
+      ),
     );
   }
 }
