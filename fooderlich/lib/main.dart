@@ -3,7 +3,7 @@ import 'package:fooderlich/screens/explore_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'fooderlich_theme.dart';
-import 'home.dart';
+import 'screens/home.dart';
 import 'models/grocery_manager.dart';
 import 'models/tab_manager.dart';
 

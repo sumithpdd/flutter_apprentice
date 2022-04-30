@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fooderlich/screens/grocery_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'models/tab_manager.dart';
-import 'screens/explore_screen.dart';
-import 'screens/recipes_screen.dart';
+import '../models/tab_manager.dart';
+import 'explore_screen.dart';
+import 'recipes_screen.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
